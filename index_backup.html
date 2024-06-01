@@ -1,0 +1,154 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1> World of Goo World Current Records </h1>
+    
+    <li><a href = "{% url 'HistoryRecords' %}"> History Records </a></li>
+
+    <h2> Record list: </h2>
+
+    <table border = "1" cellspacing = "0" align = "center">
+        <tr>
+            <th align = "center"> Level Name </th>
+            <th align = "center"> Max Balls </th>
+            <th align = "center"> Least Moves </th>
+            <th align = "center" colspan = "2"> Least Time </th>
+        </tr>
+        <tr>
+            <th align = "center" colspan = "3"> </th>
+            <th align = "center"> Goal </th>
+            <th align = "center"> OCD </th>
+        </tr>
+        {% for level in levels_list %}
+            {% if level.LevelId == 1 %}
+                <tr>
+                    <th align = "center" colspan = "5"> Chatper 1: The Goo Filled Hills </th>
+                </tr>
+            {% endif %}
+            <tr>
+                <td align = "center">
+                    {{level.LevelName}}
+                </td>
+                <td align = "center">
+                    <script type = "text/javascript">
+                        $(function () { $('#{{level.BallRec.Name}}').collapse('hide')});
+                        $(function () { $('#{{level.MoveRec.Name}}').collapse('hide')});
+                        $(function () { $('#{{level.TimeRec.Name}}').collapse('hide')});
+                        $(function () { $('#{{level.OCDTimeRec.Name}}').collapse('hide')});
+                    </script> 
+                    {% if level.BallRec %}
+                        {% if level.BallRec.Available == 1 %}
+                            {{level.BallRec.Score}} - {{level.BallRec.Player}}
+                            <br/>
+                            {{level.BallRec.Date}}
+                            <br/>
+                            {% if level.BallRec.Link %}
+                                <a href = "{{level.BallRec.Link}}"> [Video]</a>
+                            {% endif %}
+                            {% if level.BallRec.Description %}
+                                <div class = "panel-group" id = "Description">
+                                    <a data-toggle = "collapse" href = "#{{level.BallRec.Name}}">
+                                        (Description)
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            {{level.BallRec.Score}} - N/A
+                    {% endif %}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td align = "center">
+                    {% if level.MoveRec %}
+                        {% if level.MoveRec.Available == 1 %}
+                            {{level.MoveRec.Score}} - {{level.MoveRec.Player}}
+                            <br/>
+                            {{level.MoveRec.Date}}
+                            <br/>
+                            {% if level.MoveRec.Link %}
+                                <a href = "{{level.MoveRec.Link}}"> [Video]</a>
+                            {% endif %}
+                            {% if level.MoveRec.Description %}
+                                <a data-toggle = "collapse" href = "#{{level.MoveRec.Name}}">
+                                    (Description)
+                                </a>
+                            {% endif %}
+                            </div>
+                        {% else %}
+                            {{level.MoveRec.Score}} - N/A
+                    {% endif %}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td align = "center">
+                    {% if level.TimeRec %}
+                        {% if level.TimeRec.Available == 1 %}
+                            <script> calc_time({{level.TimeRec.Score}}) </script> - {{level.TimeRec.Player}}
+                            <br/>
+                            {{level.TimeRec.Date}}
+                            <br/>
+                            {% if level.TimeRec.Link %}
+                                <a href = "{{level.TimeRec.Link}}"> [Video]</a>
+                            {% endif %}     
+                            {% if level.TimeRec.Description %}
+                                <a data-toggle = "collapse" href = "#{{level.TimeRec.Name}}">
+                                    (Description)
+                                </a>
+                            {% endif %}
+                            </div>
+                        {% else %}
+                            {{level.TimeRec.Score}} - N/A
+                    {% endif %}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td align = "center">
+                    {% if level.OCDTimeRec %}
+                        {% if level.OCDTimeRec.Available == 1 %}
+                            <script> calc_time({{level.OCDTimeRec.Score}}) </script> - {{level.OCDTimeRec.Player}}
+                            <br/>
+                            {{level.OCDTimeRec.Date}}
+                            <br/>
+                            {% if level.OCDTimeRec.Link %}
+                                <a href = "{{level.OCDTimeRec.Link}}"> [Video]</a>
+                            {% endif %}
+                            {% if level.OCDTimeRec.Description %}
+                                <a data-toggle = "collapse" href = "#{{level.OCDTimeRec.Name}}">
+                                    (Description)
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            {{level.OCDTimeRec.Score}} - N/A
+                    {% endif %}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td colspan =  "5"> 
+                    <div id = "{{level.LevelId}}">
+	                    <div class = "panel">
+                            <div id = "{{level.BallRec.Name}}" data-parent = "#{{level.LevelId}}" class = "collapse in">
+                                {{ level.BallRec.Description }}
+                            </div>
+                            <div id = "{{level.MoveRec.Name}}" data-parent = "#{{level.LevelId}}" class = "collapse in">
+                                {{ level.MoveRec.Description }}
+                            </div>
+                            <div id = "{{level.TimeRec.Name}}" data-parent = "#{{level.LevelId}}" class = "collapse in">
+                                {{ level.TimeRec.Description }}
+                            </div>
+                            <div id = "{{level.OCDTimeRec.Name}}" data-parent = "#{{level.LevelId}}" class = "collapse in">
+                                {{ level.OCDTimeRec.Description }}
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

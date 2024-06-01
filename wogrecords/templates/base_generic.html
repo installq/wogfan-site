@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% block title %}<title> World of Goo World Records </title>{% endblock %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {% comment %} <link rel = "stylesheet" href = "/static/css/styles.css"> {% endcomment %}
+        <link rel="icon" href='/static/pictures/common_goo.png' type="image/x-icon" sizes="32x32">
+        <link rel = "stylesheet" href = "https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src = "https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+        <script src = "https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <style>
+            @font-face {
+                font-family: "EMB";
+                src: url("/static/fonts/Earth_s_Mightiest_Bold/EARTMB2.ttf") format("ttf"),
+                     url("/static/fonts/Earth_s_Mightiest_Bold/EARTMB2.woff") format("woff");
+            }
+            @font-face {
+                font-family: "TWCEN";
+                src: url("/static/fonts/TWCEN/tcceb-webfont.woff") format("woff"),
+                     url("/static/fonts/TWCEN/tcceb-webfont.woff2") format("woff2");
+            }
+            body {
+                font-family: "TWCEN";
+                margin: auto;
+                padding: 50px 240px 50px 240px;
+                background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('/static/pictures/background.png');
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
+            }
+            h1 {
+                text-align: center;
+                color: #333;
+            }
+            table {
+                margin: 10px auto
+                table-layout: fixed;
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 5px 5px 5px 5px;
+                width: 20%; 
+                word-wrap: break-word;
+            }
+            th {
+                text-align: center;
+                background-color: #d2d2d2;
+                font-size: 2em;
+            }
+            td {
+                border-left: none;
+                border-right: none;
+                border-up: none;
+                border-down: 2px solid #ddd;
+                background-color: rgba(239,239,239,0.8);
+                font-size: 1.5em;
+                line-height: 1em;
+            }
+        </style>
+
+        <script type = "text/javascript">
+            function calc_time(sc){
+                let m = parseInt(sc / 60000);
+                let s = parseInt((sc / 1000) % 60);
+                if(m < 10) document.write("0");
+                document.write(m);
+                document.write(":");
+                if(s < 10) document.write("0");
+                document.write(s);
+            }
+        </script>
+
+    </head>
+
+    <body>
+        {% block content %}{% endblock %}
+    </body>
+</html>
+{% comment %} 接下来要设置字体 {% endcomment %}

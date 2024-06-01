@@ -1,0 +1,123 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1> World of Goo History WRs </h1>
+
+    <h3 align = "center">
+        <a href = "{% url 'index' %}"> Back to Current Records </a>
+    </h3>
+
+    <div style = "padding: 5px 100px 5px 100px; font-size: 1.8em;">
+        *This page is still under construction, a lot of history records have not yet been included.*
+    </div>
+
+    <div style = "padding: 5px 100px 5px 100px; font-size: 1.5em;">
+        This page lists all records ever broken in game's history.
+        Some of the records may be missing, as it is difficult to find early WRs. If you know about records that are not on this list, please contact us can give some possible information. We would appreciate you for that.
+        <br/>
+        You can filter the records by level and record type.
+    </div>
+
+    </br>
+
+    <form method = "get" action = "" align = "center">
+        <label for = "RecordLevel"> Select Level </label>
+        <select name = "SelectRecordLevel" id = "SelectRecordLevel">
+            <option value = "0"> All </option>
+            {% for level in levels_list %}
+                <option value = "{{level.LevelName}}" {% if level_select == level.LevelName %} selected {% endif %} > {{level.LevelName}} </option>
+            {% endfor %}
+        </select>
+        <label for = "RecordType"> Record Type </label>
+        <select name = "SelectRecordType" id = "SelectRecordType">
+            <option value = "0"> All </option>
+            <option value = "B" {% if record_type == "B" %} selected {% endif %} > Max Balls </option>
+            <option value = "M" {% if record_type == "M" %} selected {% endif %} > Least Moves </option>
+            <option value = "T" {% if record_type == "T" %} selected {% endif %} > Goal Time </option>
+            <option value = "O" {% if record_type == "O" %} selected {% endif %} > OCD Time </option>
+        </select>
+        <br/>
+        <input type = "submit" value = "Filter Records">
+    </form>
+    
+    <br/>
+
+    <table border = "1" cellspacing = "0" align = "center">
+        <tr>
+            <th align = "center"> Level Name </th>
+            <th align = "center"> Record </th>
+            <th align = "center"> Player </th>
+            <th align = "center"> Date </th>
+            <th align = "center"> Video </th>
+        </tr>
+        <tr>
+            <td colspan = "5"> </td>
+        </tr>
+        {% for record in records_list %}
+            {% if record.Available == 1 %}
+                <tr>
+                    <td align = "center">
+                        {{record.LevelName}}
+                    </td>
+                    <td align = "center">
+                        {% if record.Type == "T" or record.Type == "O" %}
+                            {% if record.Type == "T" %}
+                                Goal
+                            {% else %}
+                                OCD
+                            {% endif %}
+                            <script> calc_time({{record.Score}}) </script>
+                        {% else %}
+                            {{record.Score}}
+                            {% if record.Type == "B" %}
+                                Balls
+                            {% else %}
+                                Moves
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td align = "center">
+                        {% if record.Player  %}
+                            {{record.Player}}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td align = "center">
+                        {% if record.Date  %}
+                            {{record.Date}}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td align = "center">
+                        {% if record.Link  %}
+                            <a href = "{{record.Link}}"> [Link]</a>
+                        {% endif %}
+                        {% if record.DownloadLink %}
+                            <a href = "{{record.DownloadLink}}"> [Download]</a>
+                        {% endif %}
+                        {% if record.Description %}
+                            <a data-toggle = "collapse" data-parent = "#Description" href = "#{{record.Name}}">
+                                (D)
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan = "5" style = "padding: 5px 100px 5px 100px;">
+                        {% if record.Description %}
+                            <div id = "{{record.Name}}" class = "collapse in" style = "font-size: 0.8em; opacity: 0.8;">
+                                {{ record.Description|safe|linebreaksbr }} </br></br> - The Sign Painter
+                            </div>
+                            <script type = "text/javascript">
+                                $(function () { $('#{{record.Name}}').collapse('hide')});
+                            </script>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+
+{% endblock %}
