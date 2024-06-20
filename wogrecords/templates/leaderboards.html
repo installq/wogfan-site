@@ -1,9 +1,144 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+    <style>
+        th, td {
+            padding: 5px 5px 5px 5px;
+            width: auto; 
+            word-wrap: break-word;
+        }
+        th {
+            font-size: 1.5em;
+        }
+    </style>
     <h1> World of Goo Leaderboards </h1>
 
+    <h2 align = "center">
+        <a href = "{% url 'index' %}"> World of Goo World Records </a>
+    </h2>
+    <h2 align = "center">
+        <a href = "{% url 'index2' %}"> World of Goo 2 World Records </a>
+    </h2>
+
+    Still under construction.
+    </br>
+
+    List of Players with at least one WR: 
+    
+
+
+    {{players_count}} Players
+    </br>
+
+    <div align = "center">
+
+    <div style="display:inline-block;margin-right:10px">
+    <h2 align = "center">
+        Count of Records Currently Holding:
+    </h2>
     <table border = "1" cellspacing = "0" align = "center">
+        <tr>
+            <th align = "center"> Player </th>
+            <th align = "center"> Balls </th>
+            <th align = "center"> Moves </th>
+            <th align = "center"> Goal </th>
+            <th align = "center"> OCD </th>
+            <th align = "center"> Total </th>
+        </tr>
+        {% for item in player_current_record_list %}
+            <tr>
+                {% for value in item %}
+                    <td align = "center"> {{value}} </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
     </table>
+    </div>
+    <div style="display:inline-block;margin-right:10px">
+    <h2 align = "center">
+        Count of Records Ever Broken:
+    </h2>
+    <table border = "1" cellspacing = "0" align = "center">
+        <tr>
+            <th align = "center"> Player </th>
+            <th align = "center"> Balls </th>
+            <th align = "center"> Moves </th>
+            <th align = "center"> Goal </th>
+            <th align = "center"> OCD </th>
+            <th align = "center"> Total </th>
+        </tr>
+        {% for item in player_history_record_list %}
+            <tr>
+                {% for value in item %}
+                    <td align = "center"> {{value}} </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+    </div>
+
+    
+    <h2 align = "center">
+        Full Game Completion:
+    </h2>
+
+    <div align = "center">
+
+    <div style="display:inline-block;margin-right:10px">
+    <h3 align = "center">
+        Max Balls
+    </h3>
+    <table border = "1" cellspacing = "0" align = "center">
+        <tr>
+            <th align = "center"> Player </th>
+            <th align = "center"> Total Balls </th>
+        </tr>
+        {% for player in player_ball_list %}
+            <tr>
+                <td align = "center"> {{player.Name}} </td>
+                <td align = "center"> {{player.Balls}} </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+    <div style="display:inline-block;margin-right:10px">
+    <h3 align = "center">
+        Least Moves
+    </h3>
+    <table border = "1" cellspacing = "0" align = "center">
+        <tr>
+            <th align = "center"> Player </th>
+            <th align = "center"> Total Move </th>
+        </tr>
+        {% for player in player_move_list %}
+            <tr>
+                <td align = "center"> {{player.Name}} </td>
+                <td align = "center"> {{player.Moves}} </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+    <div style="display:inline-block">
+    <h3 align = "center">
+        Least Time
+    </h3>
+    <table border = "1" cellspacing = "0" align = "center">
+        <tr>
+            <th align = "center"> Player </th>
+            <th align = "center"> Total Time </th>
+        </tr>
+        {% for player in player_time_list %}
+            <tr>
+                <td align = "center"> {{player.Name}} </td>
+                <td align = "center"> <script> calc_time({{player.Time}}) </script> </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+    </div>
 
 {% endblock %}

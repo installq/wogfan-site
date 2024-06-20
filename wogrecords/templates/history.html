@@ -97,7 +97,7 @@
                         {% if record.DownloadLink %}
                             <a href = "{{record.DownloadLink}}"> [Download]</a>
                         {% endif %}
-                        {% if record.Description %}
+                        {% if record.Description or record.Description_notes or record.ImageLink %}
                             <a data-toggle = "collapse" data-parent = "#Description" href = "#{{record.Name}}">
                                 (D)
                             </a>
@@ -106,9 +106,17 @@
                 </tr>
                 <tr>
                     <td colspan = "5" style = "padding: 5px 100px 5px 100px;">
-                        {% if record.Description %}
-                            <div id = "{{record.Name}}" class = "collapse in" style = "font-size: 0.8em; opacity: 0.8;">
-                                {{ record.Description|safe|linebreaksbr }} </br></br> - The Sign Painter
+                        {% if record.Description or record.Description_notes or record.ImageLink %}
+                            <div id = "{{record.Name}}" class = "collapse in">
+                                {% if record.Description %}
+                                    <div style = "font-size: 0.9em; opacity: 0.8; padding: 0px 150px 0px 150px;"> {{ record.Description|safe|linebreaksbr }} </br> - comments from player </br></br> </div>
+                                {% endif %}
+                                {% if record.Description_notes %}
+                                    <div style = "font-size: 0.8em; opacity: 0.95; padding: 0px 150px 0px 150px;"> {{ record.Description_notes|safe|linebreaksbr }} </br> - The Sign Painter </div>
+                                {% endif %}
+                                {% if record.ImageLink %}
+                                    </br> <div style = "text-align:center"> <img src = {{record.ImageLink}} alt = "Record Image" width="900" height="600" style = "text-align:center"> </div>
+                                {% endif %}
                             </div>
                             <script type = "text/javascript">
                                 $(function () { $('#{{record.Name}}').collapse('hide')});

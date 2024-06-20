@@ -6,6 +6,9 @@
     <h2 align = "center">
         <a href = "{% url 'index2' %}"> World of Goo 2 World Records </a>
     </h2>
+    <h2 align = "center">
+        <a href = "{% url 'leaderboards' %}"> Player Leaderboards </a>
+    </h2>
 
     <div style = "padding: 5px 100px 5px 100px; font-size: 1.5em;">
         This page only contains current world records of World of Goo Levels.
@@ -32,6 +35,7 @@
     <div style = "padding: 5px 100px 5px 100px; font-size: 1.5em;">
         Website Managers (contact if necessary):
         <li> installb </li>
+        <li> Liyuan </li>
         <br/>
     </div>
 
@@ -50,8 +54,14 @@
         function add_M(x){ move_score = move_score + x; }
         function add_T(x){ time_score = time_score + x; }
         function add_O(x){ ocd_score = ocd_score + x; }
-    </script>
+    </script> 
 
+    {% for version in versions_list %}
+
+    <h2 align = "center">
+        Version {{version}}:
+    </h2>
+    
     <table border = "1" cellspacing = "0" align = "center">
         <tr>
             <th align = "center"> Level Name </th>
@@ -60,47 +70,28 @@
             <th align = "center"> Least Time (Goal) </th>
             <th align = "center"> Least Time (OCD) </th>
         </tr>
-        {% for level in levels_list %}
 
+        {% for level in levels_list %}
+        {% if level.Version == version %}
             {% if level.LevelId == 1 %}
-                <tr>
-                    <th align = "center" colspan = "5" style = "background-color: #7CF66D;"> Chatper 1: The Goo Filled Hills </th>
-                </tr>
-                <tr>
-                    <td colspan = "5"> </td>
-                </tr>
+                <tr> <th align = "center" colspan = "5" style = "background-color: #7CF66D;"> Chatper 1: The Goo Filled Hills </th> </tr>
+                <tr> <td colspan = "5"> </td> </tr>
             {% endif %}
             {% if level.LevelId == 13 %}
-                <tr>
-                    <th align = "center" colspan = "5" style = "background-color: #FAC064;"> Chatper 2: Little Miss World of Goo </th>
-                </tr>
-                <tr>
-                    <td colspan = "5"> </td>
-                </tr>
+                <tr> <th align = "center" colspan = "5" style = "background-color: #FAC064;"> Chatper 2: Little Miss World of Goo </th> </tr>
+                <tr> <td colspan = "5"> </td> </tr>
             {% endif %}
             {% if level.LevelId == 25 %}
-                <tr>
-                    <th align = "center" colspan = "5" style = "background-color: #68635E;"> Chatper 3: Cog in the Machine </th>
-                </tr>
-                <tr>
-                    <td colspan = "5"> </td>
-                </tr>
+                <tr> <th align = "center" colspan = "5" style = "background-color: #68635E;"> Chatper 3: Cog in the Machine </th> </tr>
+                <tr> <td colspan = "5"> </td> </tr>
             {% endif %}
             {% if level.LevelId == 37 %}
-                <tr>
-                    <th align = "center" colspan = "5" style = "background-color: #01FF0C;"> Chatper 4: Information Superhighway </th>
-                </tr>
-                <tr>
-                    <td colspan = "5"> </td>
-                </tr>
+                <tr> <th align = "center" colspan = "5" style = "background-color: #01FF0C;"> Chatper 4: Information Superhighway </th> </tr>
+                <tr> <td colspan = "5"> </td> </tr>
             {% endif %}
             {% if level.LevelId == 47 %}
-                <tr>
-                    <th align = "center" colspan = "5" style = "background-color: #FFEB6B;"> Epilogue: End of the World </th>
-                </tr>
-                <tr>
-                    <td colspan = "5"> </td>
-                </tr>
+                <tr> <th align = "center" colspan = "5" style = "background-color: #FFEB6B;"> Epilogue: End of the World </th> </tr>
+                <tr> <td colspan = "5"> </td> </tr>
             {% endif %}
             {% comment %} chapters {% endcomment %}
             <tr>
@@ -120,12 +111,12 @@
                         {% if level.BallRec.Available == 1 %}
                             {{level.BallRec.Score}} - {{level.BallRec.Player.Name}}
                             <br/>
-                            {{level.BallRec.Date}}
+                            {{level.BallRec.Date|date:"Y/m/d"}}
                             <br/>
                             {% if level.BallRec.Link %}
                                 <a href = "{{level.BallRec.Link}}"> [Video]</a>
                             {% endif %}
-                            {% if level.BallRec.Description %}
+                            {% if level.BallRec.Description or level.BallRec.ImageLink or level.BallRec.Description_notes %}
                                 <a href = 'javascript:void(0);' onclick = 'open_desc("{{level.BallRec.Name}}","{{level.MoveRec.Name}}","{{level.TimeRec.Name}}","{{level.OCDTimeRec.Name}}");'>
                                     (Description)
                                 </a>
@@ -144,12 +135,12 @@
                         {% if level.MoveRec.Available == 1 %}
                             {{level.MoveRec.Score}} - {{level.MoveRec.Player.Name}}
                             <br/>
-                            {{level.MoveRec.Date}}
+                            {{level.MoveRec.Date|date:"Y/m/d"}}
                             <br/>
                             {% if level.MoveRec.Link %}
                                 <a href = "{{level.MoveRec.Link}}"> [Video]</a>
                             {% endif %}
-                            {% if level.MoveRec.Description %}
+                            {% if level.MoveRec.Description or level.MoveRec.ImageLink or level.MoveRec.Description_notes  %}
                                 <a href = 'javascript:void(0);' onclick = 'open_desc("{{level.MoveRec.Name}}","{{level.BallRec.Name}}","{{level.TimeRec.Name}}","{{level.OCDTimeRec.Name}}");'>
                                     (Description)
                                 </a>
@@ -173,12 +164,12 @@
                         {% if level.TimeRec.Available == 1 %}
                             <script> calc_time({{level.TimeRec.Score}}) </script> - {{level.TimeRec.Player.Name}}
                             <br/>
-                            {{level.TimeRec.Date}}
+                            {{level.TimeRec.Date|date:"Y/m/d"}}
                             <br/>
                             {% if level.TimeRec.Link %}
                                 <a href = "{{level.TimeRec.Link}}"> [Video]</a>
                             {% endif %}     
-                            {% if level.TimeRec.Description %}
+                            {% if level.TimeRec.Description or level.TimeRec.ImageLink or level.TimeRec.Description_notes  %}
                                 <a href = 'javascript:void(0);' onclick = 'open_desc("{{level.TimeRec.Name}}","{{level.MoveRec.Name}}","{{level.BallRec.Name}}","{{level.OCDTimeRec.Name}}");'>
                                     (Description)
                                 </a>
@@ -199,12 +190,12 @@
                         {% if level.OCDTimeRec.Available == 1 %}
                             <script> calc_time({{level.OCDTimeRec.Score}}) </script> - {{level.OCDTimeRec.Player.Name}}
                             <br/>
-                            {{level.OCDTimeRec.Date}}
+                            {{level.OCDTimeRec.Date|date:"Y/m/d"}}
                             <br/>
                             {% if level.OCDTimeRec.Link %}
                                 <a href = "{{level.OCDTimeRec.Link}}"> [Video]</a>
                             {% endif %}
-                            {% if level.OCDTimeRec.Description %}
+                            {% if level.OCDTimeRec.Description or level.OCDTimeRec.ImageLink or level.OCDTimeRec.Description_notes  %}
                                 <a href = 'javascript:void(0);' onclick = 'open_desc("{{level.OCDTimeRec.Name}}","{{level.MoveRec.Name}}","{{level.BallRec.Name}}","{{level.TimeRec.Name}}");'>
                                     (Description)
                                 </a>
@@ -220,53 +211,93 @@
             </tr>
             <tr>
                 <td colspan =  "5" > 
-                    <div id = "{{level.LevelId}}" style = "font-size: 0.8em; opacity: 0.8; padding: 0px 200px 0px 200px;">
+                    <div id = "{{level.LevelId}}">
                         {% if level.BallRec %}
                         <div id = "{{level.BallRec.Name}}" data-parent = "#{{level.LevelId}}" class = "collapse in">
-                            {{ level.BallRec.Description|safe|linebreaksbr }} </br></br> - The Sign Painter
+                            {% if level.BallRec.Description %}
+                                <div style = "font-size: 0.9em; opacity: 0.8; padding: 0px 150px 0px 150px;"> {{ level.BallRec.Description|safe|linebreaksbr }} </br> - comments from player </br></br> </div>
+                            {% endif %}
+                            {% if level.BallRec.Description_notes %}
+                                <div style = "font-size: 0.8em; opacity: 0.9; padding: 0px 150px 0px 150px;"> {{ level.BallRec.Description_notes|safe|linebreaksbr }} </br> - The Sign Painter </div>
+                            {% endif %}
+                            {% if level.BallRec.ImageLink %}
+                                </br> <div style = "text-align:center"> <img src = {{level.BallRec.ImageLink}} alt = "Record Image" width="900" height="600"> </div>
+                            {% endif %}
                         </div>
                         {% endif %}
                         {% if level.MoveRec %}
                         <div id = "{{level.MoveRec.Name}}" data-parent = "#{{level.LevelId}}" class = "collapse in">
-                            {{ level.MoveRec.Description|safe|linebreaksbr }} </br></br> - The Sign Painter
+                            {% if level.MoveRec.Description %}
+                                <div style = "font-size: 0.9em; opacity: 0.8; padding: 0px 150px 0px 150px;"> {{ level.MoveRec.Description|safe|linebreaksbr }} </br> - comments from player </br></br> </div>
+                            {% endif %}
+                            {% if level.MoveRec.Description_notes %}
+                                <div style = "font-size: 0.8em; opacity: 0.95; padding: 0px 150px 0px 150px;"> {{ level.MoveRec.Description_notes|safe|linebreaksbr }} </br> - The Sign Painter </div>
+                            {% endif %}
+                            {% if level.MoveRec.ImageLink %}
+                                </br> <div style = "text-align:center"> <img src = {{level.MoveRec.ImageLink}} alt = "Record Image" width="900" height="600" style = "text-align:center"> </div>
+                            {% endif %}
                         </div>
                         {% endif %}
                         {% if level.TimeRec %}
                         <div id = "{{level.TimeRec.Name}}" data-parent = "#{{level.LevelId}}" class = "collapse in">
-                            {{ level.TimeRec.Description|safe|linebreaksbr }} </br></br> - The Sign Painter
+                            {% if level.TimeRec.Description %}
+                                <div style = "font-size: 0.9em; opacity: 0.8; padding: 0px 150px 0px 150px;"> {{ level.TimeRec.Description|safe|linebreaksbr }} </br> - comments from player </br></br> </div>
+                            {% endif %}
+                            {% if level.TimeRec.Description_notes %}
+                                <div style = "font-size: 0.8em; opacity: 0.95; padding: 0px 150px 0px 150px;"> {{ level.TimeRec.Description_notes|safe|linebreaksbr }} </br> - The Sign Painter </div>
+                            {% endif %}
+                            {% if level.TimeRec.ImageLink %}
+                                </br> <div style = "text-align:center"> <img src = {{level.TimeRec.ImageLink}} alt = "Record Image" width="900" height="600" style = "text-align:center"> </div>
+                            {% endif %}
                         </div>
                         {% endif %}
                         {% if level.OCDTimeRec and level.TimeRec != level.OCDTimeRec %}
                         <div id = "{{level.OCDTimeRec.Name}}" data-parent = "#{{level.LevelId}}" class = "collapse in">
-                            {{ level.OCDTimeRec.Description|safe|linebreaksbr }} </br></br> - The Sign Painter
+                            {% if level.OCDTimeRec.Description %}
+                                <div style = "font-size: 0.9em; opacity: 0.8; padding: 0px 150px 0px 150px;"> {{ level.OCDTimeRec.Description|safe|linebreaksbr }} </br> - comments from player </br></br> </div>
+                            {% endif %}
+                            {% if level.OCDTimeRec.Description_notes %}
+                                <div style = "font-size: 0.8em; opacity: 0.95; padding: 0px 150px 0px 150px;"> {{ level.OCDTimeRec.Description_notes|safe|linebreaksbr }} </br> - The Sign Painter </div>
+                            {% endif %}
+                            {% if level.OCDTimeRec.ImageLink %}
+                                </br> <div style = "text-align:center"> <img src = {{level.OCDTimeRec.ImageLink}} alt = "Record Image" width="900" height="600" style = "text-align:center"> </div>
+                            {% endif %}
                         </div>
                         {% endif %}
                     </div>
                 </td>
             </tr>
+        {% endif %}
         {% endfor %}
-        <tr style = "background-color: #68635E;">
-            <td align = "center"> Totals: </td>
-            <td align = "center">
-                <script type = "text/javascript"> document.write(ball_score); </script>
-            </td>
-            <td align = "center">
-                <script type = "text/javascript"> document.write(move_score); </script>
-            </td>
-            <td align = "center">
-                <script type = "text/javascript"> calc_time(time_score); </script>
-            </td>
-            <td align = "center">
-                <script type = "text/javascript"> calc_time(ocd_score); </script>
-            </td>
-        </tr>
-        <tr>
-            <td colspan = "2"> </td>
-            <td align = "center">
-                Highest Tower
-            </td>
-            <td colspan = "2"> </td>
-        </tr>
+
+        {% if version == "1.3" %}
+            <tr style = "background-color: #68635E;">
+                <td align = "center"> Totals: </td>
+                <td align = "center">
+                    <script type = "text/javascript"> document.write(ball_score); </script>
+                </td>
+                <td align = "center">
+                    <script type = "text/javascript"> document.write(move_score); </script>
+                </td>
+                <td align = "center">
+                    <script type = "text/javascript"> calc_time(time_score); </script>
+                </td>
+                <td align = "center">
+                    <script type = "text/javascript"> calc_time(ocd_score); </script>
+                </td>
+            </tr>
+            <tr>
+                <td colspan = "2"> </td>
+                <td align = "center">
+                    Highest Tower
+                </td>
+                <td colspan = "2"> </td>
+            </tr>
+        {% endif %}
+        
     </table>
+    {% endfor %}
+
+    Update 2024/6/20: Added leaderboard. Added comment/notes and image. Split version 1.3 and 1.5.
 
 {% endblock %}
