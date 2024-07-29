@@ -7,10 +7,6 @@
         <a href = "{% url 'index2' %}"> Back to Current Records </a>
     </h3>
 
-    <div style = "padding: 5px 100px 5px 100px; font-size: 1.8em;">
-        *This page is still under construction, a lot of history records have not yet been included.*
-    </div>
-
     <div style = "padding: 5px 100px 5px 100px; font-size: 1.5em;">
         This page lists all records ever broken in game's history.
         Some of the records may be missing, as it is difficult to find early WRs. If you know about records that are not on this list, please contact us can give some possible information. We would appreciate you for that.
@@ -24,21 +20,21 @@
         <label for = "RecordLevel"> Select Level </label>
         <select name = "SelectRecordLevel" id = "SelectRecordLevel">
             <option value = "0"> Select Level </option>
+            <option value = "1"> All </option>
             {% for level in levels_list %}
                 {% if level.Version == "2.0" %}
                     <option value = "{{level.LevelName}}" {% if level_select == level.LevelName %} selected {% endif %} > {{level.LevelName}} </option>
                 {% endif %}
             {% endfor %}
-            <option value = "1"> All </option>
         </select>
         <label for = "RecordType"> Record Type </label>
         <select name = "SelectRecordType" id = "SelectRecordType">
             <option value = "0"> Select Record Type </option>
+            <option value = "1"> All </option>
             <option value = "B" {% if record_type == "B" %} selected {% endif %} > Max Balls </option>
             <option value = "M" {% if record_type == "M" %} selected {% endif %} > Least Moves </option>
             <option value = "T" {% if record_type == "T" %} selected {% endif %} > Goal Time </option>
             <option value = "O" {% if record_type == "O" %} selected {% endif %} > OCD Time </option>
-            <option value = "1"> All </option>
         </select>
         <br/>
         <input type = "submit" value = "Filter Records">

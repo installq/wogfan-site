@@ -104,3 +104,19 @@ class Level(models.Model):
     
     class Meta:
         ordering = ["LevelId"]
+    
+class Level2(models.Model):
+    # level
+    LevelName = models.CharField(max_length = 128)
+    LevelId = models.IntegerField()
+    Version = models.CharField(max_length = 10,default = "2.0")
+    BallRec = models.OneToOneField('Record2', on_delete = models.SET_NULL, null = True, blank = True, related_name = 'balls')
+    MoveRec = models.OneToOneField('Record2', on_delete = models.SET_NULL, null = True, blank = True, related_name = 'moves')
+    TimeRec = models.OneToOneField('Record2', on_delete = models.SET_NULL, null = True, blank = True, related_name = 'times')
+    OCDTimeRec = models.OneToOneField('Record2', on_delete = models.SET_NULL, null = True, blank = True, related_name = 'ocdtimes')
+
+    def __str__(self):
+        return self.LevelName
+    
+    class Meta:
+        ordering = ["LevelId"]
