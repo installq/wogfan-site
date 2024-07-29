@@ -2,8 +2,9 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Record, Level, Player
+from .models import Record, Record2, Level, Player
 
 admin.site.register(Record)
+admin.site.register(Record2)
 admin.site.register(Level)
 admin.site.register(Player)
