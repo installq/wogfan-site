@@ -3,7 +3,7 @@ from django.views import generic
 
 # Create your views here.
 
-from .models import Level, Record, Player
+from .models import Level, Record, Record2, Player
 
 def index(request):
     levels_list = Level.objects.all()
@@ -18,16 +18,21 @@ def index(request):
     )
 
 def history(request):
-    levels_list = Level.objects.all()
-    records_list = Record.objects.all()
-
     record_type = request.GET.get("SelectRecordType")
-    if record_type and record_type != "0":
-        records_list = records_list.filter(Type = record_type)
-
     level_select = request.GET.get("SelectRecordLevel")
-    if level_select and level_select != "0":
-        records_list = records_list.filter(LevelName = level_select)
+    levels_list = Level.objects.all()
+    records_list = []
+
+    if (not record_type) or (not level_select) or record_type == "0" or level_select == "0":
+        records_list = []
+    else:
+        records_list = Record.objects.all()
+
+        if record_type and record_type != "0" and record_type != "1":
+            records_list = records_list.filter(Type = record_type)
+
+        if level_select and level_select != "0" and level_select != "1":
+            records_list = records_list.filter(LevelName = level_select)
 
     return render(
         request,
@@ -79,6 +84,11 @@ def leaderboards(request):
 
     player_history_record_list.sort(reverse = True, key = lambda item: item[5])
     player_current_record_list.sort(reverse = True, key = lambda item: item[5])
+
+    while(len(player_history_record_list) > 0 and player_history_record_list[-1][5] == 0):
+        player_history_record_list.pop()
+    while(len(player_current_record_list) > 0 and player_current_record_list[-1][5] == 0):
+        player_current_record_list.pop()
         
     # print(player_history_record_list)
     # print(player_current_record_list)
@@ -106,20 +116,43 @@ def leaderboards(request):
                    'players_count' : players_count, 
                    'player_history_record_list' : player_history_record_list, 
                    'player_current_record_list' : player_current_record_list,
-                   'player_ball_list' : player_ball_list,
-                   'player_move_list' : player_move_list,
-                   'player_time_list' : player_time_list,
+                   'player_ball_list' : player_ball_list[0:10],
+                   'player_move_list' : player_move_list[0:10],
+                   'player_time_list' : player_time_list[0:10],
                    },
     )
 
 def index2(request):
+    levels_list = Level.objects.all()
+    records_list = Record2.objects.all()
+    levels_count = Level.objects.all().count()
+    records_count = Record2.objects.all().count()
+
     return render(
         request,
         'index2.html',
+        context = {'levels_list' : levels_list, 'records_list' : records_list, 'levels_count' : levels_count, 'records_count' : records_count },
     )
     
 def history2(request):
+    record_type = request.GET.get("SelectRecordType")
+    level_select = request.GET.get("SelectRecordLevel")
+    levels_list = Level.objects.all()
+    records_list = []
+
+    if (not record_type) or (not level_select) or record_type == "0" or level_select == "0":
+        records_list = []
+    else:
+        records_list = Record2.objects.all()
+
+        if record_type and record_type != "0" and record_type != "1":
+            records_list = records_list.filter(Type = record_type)
+
+        if level_select and level_select != "0" and level_select != "1":
+            records_list = records_list.filter(LevelName = level_select)
+
     return render(
         request,
         'history2.html',
+        context = {'levels_list' : levels_list, 'records_list' : records_list, 'level_select' : level_select, 'record_type' : record_type},
     )
