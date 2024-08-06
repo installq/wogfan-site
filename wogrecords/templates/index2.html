@@ -6,9 +6,9 @@
     <h2 align = "center">
         <a href = "{% url 'index' %}"> World of Goo World Records </a>
     </h2>
-    <h2 align = "center">
+    {% comment %} <h2 align = "center">
         <a href = "{% url 'leaderboards' %}"> Player Leaderboards </a>
-    </h2>
+    </h2> {% endcomment %}
 
     <div style = "padding: 5px 100px 5px 100px; font-size: 1.5em;">
         This page only contains current world records of World of Goo Levels.
@@ -24,6 +24,7 @@
         <li> <a href = "https://www.youtube.com/@wogfan"> Youtube wogfan channel </a> </li>
         <li> <a href = "https://www.wogfan.rf.gd"> previous wogfan site </a> </li>
         <li> <a href = "https://www.goofans.com"> Goofans site </a> </li>
+        Timezone for this website is UTC.
     </div>
 
     <div style = "padding: 5px 100px 5px 100px; font-size: 1.7em;">
@@ -36,7 +37,7 @@
         Website Managers (contact if necessary):
         <li> installb </li>
         <li> Liyuan </li>
-	<li> dengshouhao </li>
+	    <li> dengshouhao </li>
         <br/>
     </div>
 
@@ -63,7 +64,7 @@
             <th align = "center"> Max Balls </th>
             <th align = "center"> Least Moves </th>
             <th align = "center"> Least Time (Goal) </th>
-            <th align = "center"> Least Time (OCD) </th>
+            {% comment %} <th align = "center"> Least Time (OCD) </th> {% endcomment %}
         </tr>
 
         {% for level in levels_list %}
@@ -74,19 +75,19 @@
                 <tr> <td colspan = "5"> </td> </tr>
             {% endif %}
 	    {% if level.LevelId == 16 %}
-                <tr> <th align = "center" colspan = "5" style = "background-color: #FAC064;"> Chatper 2: A Distant Signal </th> </tr>
+                <tr> <th align = "center" colspan = "5" style = "background-color: #FAC064;"> Chapter 2: A Distant Signal </th> </tr>
                 <tr> <td colspan = "5"> </td> </tr>
             {% endif %}
 	    {% if level.LevelId == 30 %}
-                <tr> <th align = "center" colspan = "5" style = "background-color: #68635E;"> Chatper 3: Atomic Express </th> </tr>
+                <tr> <th align = "center" colspan = "5" style = "background-color: #68635E;"> Chapter 3: Atomic Express </th> </tr>
                 <tr> <td colspan = "5"> </td> </tr>
             {% endif %}
 	    {% if level.LevelId == 43 %}
-                <tr> <th align = "center" colspan = "5" style = "background-color: #01FF0C;"> Chatper 4: Ye Olde Reckonator </th> </tr>
+                <tr> <th align = "center" colspan = "5" style = "background-color: #01FF0C;"> Chapter 4: Ye Olde Reckonator </th> </tr>
                 <tr> <td colspan = "5"> </td> </tr>
             {% endif %}
 	    {% if level.LevelId == 58 %}
-                <tr> <th align = "center" colspan = "5" style = "background-color: #FFEB6B;"> Chatper 5: A New World </th> </tr>
+                <tr> <th align = "center" colspan = "5" style = "background-color: #FFEB6B;"> Chapter 5: A New World </th> </tr>
                 <tr> <td colspan = "5"> </td> </tr>
             {% endif %}
 
@@ -105,17 +106,31 @@
                     {% if level.BallRec %}
                         <script type = "text/javascript"> add_B({{level.BallRec.Score}}); </script>
                         {% if level.BallRec.Available == 1 %}
-                            {{level.BallRec.Score}} - {{level.BallRec.Player.Name}}
-                            <br/>
-                            {{level.BallRec.Date|date:"Y/m/d"}}
-                            <br/>
-                            {% if level.BallRec.Link %}
-                                <a href = "{{level.BallRec.Link}}"> [Video]</a>
+                            {% if level.BallRec.Score < 0 %}
+                                Infinite
+                                <br/>
+                                {% if level.BallRec.Description or level.BallRec.ImageLink or level.BallRec.Description_notes %}
+                                    <a href = 'javascript:void(0);' onclick = 'open_desc("{{level.BallRec.Name}}","{{level.MoveRec.Name}}","{{level.TimeRec.Name}}","{{level.OCDTimeRec.Name}}");'>
+                                        (Description)
+                                    </a>
+                                {% endif %}
                             {% endif %}
-                            {% if level.BallRec.Description or level.BallRec.ImageLink or level.BallRec.Description_notes %}
-                                <a href = 'javascript:void(0);' onclick = 'open_desc("{{level.BallRec.Name}}","{{level.MoveRec.Name}}","{{level.TimeRec.Name}}","{{level.OCDTimeRec.Name}}");'>
-                                    (Description)
-                                </a>
+                            {% if level.BallRec.Score >= 0 %}
+                                {{level.BallRec.Score}} - {{level.BallRec.Player.Name}}
+                                <br/>
+                                {{level.BallRec.Date|date:"Y/m/d"}}
+                                {% if level.BallRec.ExactTime %}
+                                    {{level.BallRec.ExactTime|time:"H:i"}}
+                                {% endif %}
+                                <br/>
+                                {% if level.BallRec.Link %}
+                                    <a href = "{{level.BallRec.Link}}"> [Video]</a>
+                                {% endif %}
+                                {% if level.BallRec.Description or level.BallRec.ImageLink or level.BallRec.Description_notes %}
+                                    <a href = 'javascript:void(0);' onclick = 'open_desc("{{level.BallRec.Name}}","{{level.MoveRec.Name}}","{{level.TimeRec.Name}}","{{level.OCDTimeRec.Name}}");'>
+                                        (Description)
+                                    </a>
+                                {% endif %}
                             {% endif %}
                         {% else %}
                             {{level.BallRec.Score}} - N/A
@@ -150,11 +165,12 @@
                     {% endif %}
                 </td>
 
-                {% if level.TimeRec == level.OCDTimeRec %}
+                {% comment %} {% if level.TimeRec == level.OCDTimeRec %}
                 <td align = "center" colspan = "2">
                 {% else %}
                 <td align = "center" colspan = "1">
-                {% endif %}
+                {% endif %} {% endcomment %}
+                <td align = "center" colspan = "1">
                     {% if level.TimeRec %}
                         <script type = "text/javascript"> add_T({{level.TimeRec.Score}}); </script>
                         {% if level.TimeRec.Available == 1 %}
@@ -179,7 +195,7 @@
                     {% endif %}
                 </td>
 
-                {%if level.TimeRec != level.OCDTimeRec %}
+                {% comment %} {%if level.TimeRec != level.OCDTimeRec %}
                 <td align = "center">
                     {% if level.OCDTimeRec %}
                         <script type = "text/javascript"> add_O({{level.OCDTimeRec.Score}}); </script>
@@ -203,7 +219,7 @@
                         N/A
                     {% endif %}
                 </td>
-                {% endif %}
+                {% endif %} {% endcomment %}
             </tr>
             <tr>
                 <td colspan =  "5" > 
@@ -247,7 +263,7 @@
                             {% endif %}
                         </div>
                         {% endif %}
-                        {% if level.OCDTimeRec and level.TimeRec != level.OCDTimeRec %}
+                        {% comment %} {% if level.OCDTimeRec and level.TimeRec != level.OCDTimeRec %}
                         <div id = "{{level.OCDTimeRec.Name}}" data-parent = "#{{level.LevelId}}" class = "collapse in">
                             {% if level.OCDTimeRec.Description %}
                                 <div style = "font-size: 0.9em; opacity: 0.8; padding: 0px 150px 0px 150px;"> {{ level.OCDTimeRec.Description|safe|linebreaksbr }} </br> - comments from player </br></br> </div>
@@ -259,7 +275,7 @@
                                 </br> <div style = "text-align:center"> <img src = {{level.OCDTimeRec.ImageLink}} alt = "Record Image" width="900" height="600" style = "text-align:center"> </div>
                             {% endif %}
                         </div>
-                        {% endif %}
+                        {% endif %} {% endcomment %}
                     </div>
                 </td>
             </tr>
@@ -269,7 +285,8 @@
             <tr style = "background-color: #68635E;">
                 <td align = "center"> Totals: </td>
                 <td align = "center">
-                    <script type = "text/javascript"> document.write(ball_score); </script>
+                    {% comment %} <script type = "text/javascript"> document.write(ball_score); </script> {% endcomment %}
+                    /
                 </td>
                 <td align = "center">
                     <script type = "text/javascript"> document.write(move_score); </script>
@@ -277,9 +294,9 @@
                 <td align = "center">
                     <script type = "text/javascript"> calc_time(time_score); </script>
                 </td>
-                <td align = "center">
+                {% comment %} <td align = "center">
                     <script type = "text/javascript"> calc_time(ocd_score); </script>
-                </td>
+                </td> {% endcomment %}
             </tr>
         
     </table>

@@ -26,7 +26,7 @@ STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
