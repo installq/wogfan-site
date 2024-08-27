@@ -104,8 +104,10 @@
                         $(function () { $('#{{level.OCDTimeRec.Name}}').collapse('hide')});
                     </script> 
                     {% if level.BallRec %}
-                        <script type = "text/javascript"> add_B({{level.BallRec.Score}}); </script>
-                        {% if level.BallRec.Available == 1 %}
+		    	{% if level.BallRec.Score >= 0 %}
+                            <script type = "text/javascript"> add_B({{level.BallRec.Score}}); </script>
+			{% endif %}
+			{% if level.BallRec.Available == 1 %}
                             {% if level.BallRec.Score < 0 %}
                                 Infinite
                                 <br/>
@@ -291,8 +293,7 @@
             <tr style = "background-color: #68635E;">
                 <td align = "center"> Totals: </td>
                 <td align = "center">
-                    {% comment %} <script type = "text/javascript"> document.write(ball_score); </script> {% endcomment %}
-                    /
+                    <script type = "text/javascript"> document.write(ball_score); </script>
                 </td>
                 <td align = "center">
                     <script type = "text/javascript"> document.write(move_score); </script>
