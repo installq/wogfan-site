@@ -1,0 +1,69 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <style>
+        th, td {
+            padding: 5px 5px 5px 5px;
+            width: auto; 
+            word-wrap: break-word;
+        }
+        th {
+            font-size: 1.5em;
+        }
+    </style>
+    <h1> World of Goo Leaderboards </h1>
+
+    <h2 align = "center">
+        <a href = "{% url 'index' %}"> World of Goo World Records </a>
+    </h2>
+    <h2 align = "center">
+        <a href = "{% url 'index2' %}"> World of Goo 2 World Records </a>
+    </h2>
+    </br>
+
+    <div align = "center">
+
+    <div style="display:inline-block;margin-right:10px">
+    <h2 align = "center">
+        Count of Records Currently Holding:
+    </h2>
+    <table border = "1" cellspacing = "0" align = "center">
+        <tr>
+            <th align = "center"> Player </th>
+            <th align = "center"> Balls </th>
+            <th align = "center"> Moves </th>
+            <th align = "center"> Time </th>
+            <th align = "center"> Total </th>
+        </tr>
+        {% for item in player_current_record_list %}
+            <tr>
+                {% for value in item %}
+                    <td align = "center"> {{value}} </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+    <div style="display:inline-block;margin-right:10px">
+    <h2 align = "center">
+        Count of Records Ever Broken:
+    </h2>
+    <table border = "1" cellspacing = "0" align = "center">
+        <tr>
+            <th align = "center"> Player </th>
+            <th align = "center"> Balls </th>
+            <th align = "center"> Moves </th>
+            <th align = "center"> Time </th>
+            <th align = "center"> Total </th>
+        </tr>
+        {% for item in player_history_record_list %}
+            <tr>
+                {% for value in item %}
+                    <td align = "center"> {{value}} </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+{% endblock %}

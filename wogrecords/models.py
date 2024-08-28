@@ -17,6 +17,9 @@ class Player(models.Model):
 
     def __str__(self):
         return self.Name
+    
+    def getname(self):
+        return self.Name
 
     def hash(h, key1,key2):
         return h[key1,key2]

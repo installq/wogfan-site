@@ -7,4 +7,5 @@ urlpatterns = [
     path('wog2/', views.index2, name = 'index2'),
     path('wog2_history/', views.history2, name = 'HistoryRecords2'),
     path('leaderboards/',views.leaderboards, name = 'leaderboards'),
+    path('leaderboards2/',views.leaderboards2, name = 'leaderboards2'),
 ]

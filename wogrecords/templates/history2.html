@@ -20,7 +20,7 @@
         <label for = "RecordLevel"> Select Level </label>
         <select name = "SelectRecordLevel" id = "SelectRecordLevel">
             <option value = "0"> Select Level </option>
-            <option value = "1"> All </option>
+            <option value = "1" {% if level_select == "1" %} selected {% endif %}> All </option>
             {% for level in levels_list %}
                 {% if level.Version == "2.0" %}
                     <option value = "{{level.LevelName}}" {% if level_select == level.LevelName %} selected {% endif %} > {{level.LevelName}} </option>
@@ -30,11 +30,18 @@
         <label for = "RecordType"> Record Type </label>
         <select name = "SelectRecordType" id = "SelectRecordType">
             <option value = "0"> Select Record Type </option>
-            <option value = "1"> All </option>
+            <option value = "1" {% if record_type == "1" %} selected {% endif %} > All </option>
             <option value = "B" {% if record_type == "B" %} selected {% endif %} > Max Balls </option>
             <option value = "M" {% if record_type == "M" %} selected {% endif %} > Least Moves </option>
             <option value = "T" {% if record_type == "T" %} selected {% endif %} > Goal Time </option>
             <option value = "O" {% if record_type == "O" %} selected {% endif %} > OCD Time </option>
+        </select>
+        <label for = "PlayerName"> Record Type </label>
+        <select name = "SelectPlayerName" id = "SelectPlayerName">
+            <option value = "1"> All </option>
+            {% for player in players_list %}
+                <option value = "{{player.Name}}" {% if player_select == player.Name %} selected {% endif %} > {{player.Name}} </option>
+            {% endfor %}
         </select>
         <br/>
         <input type = "submit" value = "Filter Records">
@@ -68,11 +75,14 @@
                             {% endif %}
                             <script> calc_time({{record.Score}}) </script>
                         {% else %}
-                            {{record.Score}}
                             {% if record.Type == "B" %}
-                                Balls
+                                {% if record.Score >= 0 %}
+                                    {{record.Score}} Balls
+                                {% else %}
+                                    Infinite Balls
+                                {% endif %}
                             {% else %}
-                                Moves
+                                {{record.Score}} Moves
                             {% endif %}
                         {% endif %}
                     </td>
@@ -88,6 +98,9 @@
                             {{record.Date}}
                         {% else %}
                             N/A
+                        {% endif %}
+                        {% if record.ExactTime %}
+                            {{record.ExactTime|time:"H:i"}}
                         {% endif %}
                     </td>
                     <td align = "center">

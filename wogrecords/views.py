@@ -55,8 +55,10 @@ def index2(request):
 def history2(request):
     record_type = request.GET.get("SelectRecordType")
     level_select = request.GET.get("SelectRecordLevel")
+    player_select = request.GET.get("SelectPlayerName")
     levels_list = Level2.objects.all()
     records_list = []
+    players_list = Player.objects.all()
 
     if (not record_type) or (not level_select) or record_type == "0" or level_select == "0":
         records_list = []
@@ -68,11 +70,18 @@ def history2(request):
 
         if level_select and level_select != "0" and level_select != "1":
             records_list = records_list.filter(LevelName = level_select)
+        
+        if level_select and player_select != "1":
+            new_list = []
+            for item in records_list:
+                if item.Player and item.Player.Name == player_select:
+                    new_list.append(item)
+            records_list = new_list
 
     return render(
         request,
         'history2.html',
-        context = {'levels_list' : levels_list, 'records_list' : records_list, 'level_select' : level_select, 'record_type' : record_type},
+        context = {'levels_list' : levels_list, 'records_list' : records_list, 'players_list' : players_list, 'level_select' : level_select, 'record_type' : record_type, 'player_select' : player_select},
     )
 
 def leaderboards(request):
@@ -154,5 +163,66 @@ def leaderboards(request):
                    'player_ball_list' : player_ball_list[0:10],
                    'player_move_list' : player_move_list[0:10],
                    'player_time_list' : player_time_list[0:10],
+                   },
+    )
+
+def leaderboards2(request):
+    players_list = Player.objects.all()
+    players_count = Player.objects.all().count()
+
+    player_current_record_dict = {}
+    player_history_record_dict = {}
+    for player in players_list:
+        player_current_record_dict[player.Name] = {"B" : 0, "M" : 0, "T" : 0, "SUM" : 0}
+        player_history_record_dict[player.Name] = {"B" : 0, "M" : 0, "T" : 0, "SUM" : 0}
+    for record in Record2.objects.all():
+        if record.Player:
+            player_history_record_dict[record.Player.Name][record.Type] += 1
+            player_history_record_dict[record.Player.Name]["SUM"] += 1
+    for level in Level2.objects.all():
+        records_list = []
+        if level.BallRec:
+            if level.BallRec.Score >= 0:
+                records_list.append(level.BallRec)
+        if level.MoveRec:
+            records_list.append(level.MoveRec)
+        if level.TimeRec:
+            records_list.append(level.TimeRec)
+        for record in records_list:
+            if record.Player:
+                player_current_record_dict[record.Player.Name][record.Type] += 1
+                player_current_record_dict[record.Player.Name]["SUM"] += 1
+
+    # print(player_history_record_dict)
+    # print(type(player_history_record_dict))
+    # print(player_current_record_dict)
+
+    player_history_record_list = []
+    player_current_record_list = []
+    for key in player_history_record_dict:
+        val = player_history_record_dict[key]
+        player_history_record_list.append([key,val["B"],val["M"],val["T"],val["SUM"]])
+    for key in player_current_record_dict:
+        val = player_current_record_dict[key]
+        player_current_record_list.append([key,val["B"],val["M"],val["T"],val["SUM"]])
+
+    player_history_record_list.sort(reverse = True, key = lambda item: item[4])
+    player_current_record_list.sort(reverse = True, key = lambda item: item[4])
+
+    while(len(player_history_record_list) > 0 and player_history_record_list[-1][4] == 0):
+        player_history_record_list.pop()
+    while(len(player_current_record_list) > 0 and player_current_record_list[-1][4] == 0):
+        player_current_record_list.pop()
+        
+    # print(player_history_record_list)
+    # print(player_current_record_list)
+
+    return render(
+        request,
+        'leaderboards2.html',
+        context = {'players_list' : players_list, 
+                   'players_count' : players_count, 
+                   'player_history_record_list' : player_history_record_list, 
+                   'player_current_record_list' : player_current_record_list,
                    },
     )
