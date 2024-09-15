@@ -34,9 +34,8 @@
             <option value = "B" {% if record_type == "B" %} selected {% endif %} > Max Balls </option>
             <option value = "M" {% if record_type == "M" %} selected {% endif %} > Least Moves </option>
             <option value = "T" {% if record_type == "T" %} selected {% endif %} > Goal Time </option>
-            <option value = "O" {% if record_type == "O" %} selected {% endif %} > OCD Time </option>
         </select>
-        <label for = "PlayerName"> Record Type </label>
+        <label for = "PlayerName"> Player Name </label>
         <select name = "SelectPlayerName" id = "SelectPlayerName">
             <option value = "1"> All </option>
             {% for player in players_list %}
